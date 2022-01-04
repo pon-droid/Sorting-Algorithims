@@ -38,6 +38,29 @@ void draw(SDL_Renderer *render) {
   }
 }
 
+void rect_draw(SDL_Renderer *render){
+  int i;
+  SDL_Rect rect;
+  rect.h = 32;
+
+  for(i = 0; i < ARR_S; i++){
+    rect.w = arr[i];
+    rect.y = i*32;
+    rect.x = 400;
+
+    SDL_RenderFillRect(render,&rect);
+
+  }
+}
+
+void draw_frame(SDL_Renderer *renderer){
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    draw(renderer);
+    SDL_RenderPresent(renderer);
+}
+
 void swap(int i, int j){
   int temp = arr[i];
   arr[i] = arr[j];
@@ -45,15 +68,20 @@ void swap(int i, int j){
 }
   
 
-void bubble_sort(void){
+void bubble_sort(SDL_Renderer *renderer){
   int loop = 0;
   int i;
   do{
+   
     for(i = 0; i < ARR_S; i++){
       if(arr[i] > arr[i+1]){
 	swap(i, i+1);
 	loop = 1;
 	  }
+      draw_frame(renderer);
+    if (quit()) {
+      return;
+    }
     }
 	  } while(loop);
       
@@ -72,7 +100,7 @@ int main() {
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 
   init_arr();
-  
+  bubble_sort(renderer);
   while (1) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
